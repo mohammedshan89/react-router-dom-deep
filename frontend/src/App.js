@@ -24,27 +24,35 @@ import {createBrowserRouter, RouterProvider} from 'react-router-dom'
 import Root from './Pages/Root';
 import HomePage from './Pages/Home'
 import EventsPage ,{loader as eventsLoader} from "./Pages/Events";
-import EventDetailPage from "./Pages/EventDetail";
+import EventDetailPage,{loader as eventDetailLoader,action as eventDeleteAction} from "./Pages/EventDetail";
 import NewEventPage from "./Pages/NewEvent";
 import EditEventPage from './Pages/EditEvent'
 import EventRoot from './Pages/EventRoot';
-import Error from './Pages/Error';
+import {action as ManipulatingEvents} from '../src/components/EventForm'
+import ErrorPage from './Pages/Error';
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
-    errorElement:<Error/>,
+    errorElement: <ErrorPage />,
     children: [
       { index: true, element: <HomePage /> },
       {
         path: "events",
         element: <EventRoot />,
         children: [
-          { index:true, element: <EventsPage /> , loader:eventsLoader},
-          { path: ":id", element: <EventDetailPage /> },
-          { path: "new", element: <NewEventPage /> },
-          { path: ":id/edit", element: <EditEventPage /> },
+          { index: true, element: <EventsPage />, loader: eventsLoader },
+          {
+            path: ":id",
+            loader: eventDetailLoader,
+            id: "event-detail",
+            children: [
+              { index: true, element: <EventDetailPage />,action:eventDeleteAction },
+              { path: "edit", element: <EditEventPage />,action:ManipulatingEvents },
+            ],
+          },
+          { path: "new", element: <NewEventPage />, action: ManipulatingEvents },
         ],
       },
     ],
