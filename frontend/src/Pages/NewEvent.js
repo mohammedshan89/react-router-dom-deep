@@ -1,11 +1,13 @@
 import React from 'react'
 
+import EventForm from '../components/EventForm'
+
 const NewEventPage = () => {
   return (
-    <div>
-      <h1>NewEventPage</h1>
-    </div>
+   <EventForm method='post'/>
   )
 }
 
 export default NewEventPage
+
+
